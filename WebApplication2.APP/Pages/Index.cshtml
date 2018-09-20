@@ -1,0 +1,39 @@
+﻿@page
+@model IndexModel
+<h2>@Model.encuesta</h2><hr/>
+<form method="post">
+    @for (var i = 0; i < Model.preguntas.Count; i++)
+    {
+        <input type="hidden" asp-for="@Model.respuestas[i].id" />
+        <div class="form-group">
+            <h4>@Model.preguntas[i].pregunta</h4>
+
+            @if (Model.preguntas[i].tipo == "browser")
+            {
+            <select required class="form-control" id=@Model.preguntas[i].id asp-for="@Model.respuestas[i].respuesta">
+                <option></option>
+                @for (int j = 1; j <= 5; j++)
+                {
+                    <option value=@j>@j</option>
+                }
+            </select>
+            }
+            else if (@Model.preguntas[i].tipo != "browser" && @Model.preguntas[i].tipo != "textarea")
+            {
+                if (@Model.preguntas[i].esOpcional)
+                {
+                    <input type=@Model.preguntas[i].tipo class="form-control" id=@Model.preguntas[i].id asp-for="@Model.respuestas[i].respuesta" />
+                }
+                else
+                {
+                    <input type=@Model.preguntas[i].tipo class="form-control" id=@Model.preguntas[i].id asp-for="@Model.respuestas[i].respuesta" required />
+                }
+            }
+            else
+            {
+                <textarea id=@Model.preguntas[i].id class="form-control" asp-for="@Model.respuestas[i].respuesta"></textarea>
+            }
+        </div>
+    }
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
